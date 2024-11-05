@@ -1,0 +1,29 @@
+# Blue Telemetry Tui
+
+A terminal user interface for the Blue Origin flight telemetry from the launch of the New Shepard flight on October 13 2020.
+
+## Links
+
+[Data Download Link](https://data.nasa.gov/Aerospace/Deorbit-Descent-and-Landing-Flight-1-DDL-F1-/vicw-ivgd/about_data)
+[Project description](https://techport.nasa.gov/projects/116144)
+Found from this [Reddit post](https://www.reddit.com/r/BlueOrigin/comments/oxcur7/nasa_has_published_data_that_was_recorded_during/)
+[Powerpoint about mission](https://ntrs.nasa.gov/api/citations/20210021279/downloads/FY21%20GCD%20APR%20-%20Blue%20Origin%20DDL%20Tipping%20Point-20210914%20(2).pptx.pdf)
+
+## Flight Facts
+
+New Shepard flight on October 13 2020. Apogee 107.0 Km (66.52 mi)
+
+Max altitude of PM ~100 km
+Max vertical velocity ~900 m/s
+Total flight time of PM ~7.5 min
+Landed at Blue Origin’s landing pad, ~3.3 km (~2 mi) from the launch site
+
+lift off 7.26 seconds in
+max Q at 73.23 s
+meco at 143.49
+sep at 163.26
+apogeee at 246.6 and 106,744 m
+
+## ToDos
+
+- Convert ecef algo conversion to [Olson's](https://github.com/planet36/ecef-geodetic/blob/main/olson_1996/olson_1996.c) and check performance measures

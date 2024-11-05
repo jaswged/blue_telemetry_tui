@@ -3,4 +3,33 @@ name = "blue_telemetry_tui"
 version = "0.1.0"
 edition = "2021"
 
+# On Windows `rustup component add llvm-tools-preview`
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+
+[target.x86_64-pc-windows-gnu]
+rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+
+# On Linux `sudo apt-get install lld clang`
+[target.x86_64-unknown-linux-gnu]
+rustflags = ["-C", "linker=clang", "-C", "link-arg=-fuse-ld=lld"]
+
+# On MacOS `brew install llvm`
+[target.x86_64-apple-darwin]
+rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+[target.aarch64-apple-darwin]
+rustflags = ["-C", "link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"]
+
 [dependencies]
+rstest = "0.23.0"
+miette = { version = "7.2.0", features = ["fancy"] }
+float-cmp = "0.10.0"
+dhat = "0.3.2"
+
+[profile.flamegraph]
+inherits = "release"
+debug = true
+
+[profile.dhat]
+inherits = "release"
+debug = 1
