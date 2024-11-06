@@ -2,12 +2,14 @@ use std::io;
 use std::time::Duration;
 use crossterm::event;
 use crossterm::event::{Event, KeyCode, KeyEvent, KeyEventKind};
-use ratatui::{DefaultTerminal, Frame};
+use ratatui::{DefaultTerminal, Frame, symbols};
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use ratatui::prelude::{Color, Line, Style, Stylize, Text, Widget};
 use ratatui::symbols::border;
-use ratatui::widgets::{Block, Borders, Gauge, Paragraph};
+use ratatui::widgets::{Axis, Block, Chart, Dataset, Borders, Gauge, GraphType, Paragraph};
+
+use crate::coord::EcefCoord;
 use crate::csv_reader::TelemetryRecord;
 
 #[derive(Debug, Default)]
@@ -21,6 +23,8 @@ pub struct App {
     // Display fields
     avg_vel: f64,
     current_time: u64,
+    current_alt: f64,
+    altitude_points: Vec<(usize, f64)>,
 }
 
 // Counter ratatui example
@@ -36,13 +40,14 @@ impl App {
             initial_time: 0,
             avg_vel: 0.0,
             current_time: 0,
+            current_alt: 0.0,
+            altitude_points: Vec::new(),
         }
     }
 
     /// runs the application's main loop until the user quits
     pub fn run(&mut self, terminal: &mut DefaultTerminal) -> io::Result<()> {
         while !self.exit {
-            self.counter += 1;
             terminal.draw(|frame| {
                 self.draw(frame)
             })?;
@@ -57,10 +62,18 @@ impl App {
                 }
                 self.avg_vel = last.vel_x;
                 self.current_time = (last.timestamp_ns - self.initial_time) / self.time_chunk_duration;
+
+                let ecef = EcefCoord { x: last.pos_x, y: last.pos_y, z: last.pos_z };
+                let alt = ecef.to_geo().alt.round(); // Round to whole number for nicer display
+                self.altitude_points.push((self.current_chunk, alt));
+                self.current_alt = alt;
+
+                // todo average the velocity over the chunk
+                //self.velocity_points.push((self.current_time, alt));
+
                 self.current_chunk += 1;
             }
 
-            // self.handle_events()?;
             // 250 is 4/sec 4 hz. 200 is 5/sec 5 hz
             if event::poll(Duration::from_millis(200))? {
                 self.handle_events()?;
@@ -123,15 +136,13 @@ impl Widget for &App {
         ]);
         let block = Block::bordered()
             .title(title.centered())
-            // todo put middle bits here?
             .title_bottom(instructions.centered())
             .border_set(border::THICK);
 
-        let counter_text = Text::from(vec![Line::from(vec![
+        let time_text = Text::from(vec![Line::from(vec![
             "New Shepard, Time +".into(),
             self.current_time.to_string().yellow(), // +x seconds
             " s".into(),
-            // format!("{}", self.current_chunk / self.chunks.len()).yellow()
         ])]);
 
         let cur_percent = (self.current_chunk as f32 / (self.chunks.len() as f32) * 100.0).round() as u16;
@@ -140,10 +151,10 @@ impl Widget for &App {
             .gauge_style(Style::default().fg(Color::Cyan))
             .percent(cur_percent);
 
-        // Render Chart (Simulated as simple ASCII chart)
-        let chart_title = Line::from("Flight Data Chart".bold());
+        // Altitude chart
+        let chart_title = Line::from("Altitude Chart".bold());
         let chart = Paragraph::new(vec![
-            Line::from("Time vs Velocity: ".to_string()),
+            Line::from("Time vs Altitude: ".to_string()),
             Line::from(format!("|{}|", "-".repeat(self.avg_vel as usize / 10))),
         ])
             .block(Block::default().title(chart_title).borders(Borders::ALL));
@@ -156,7 +167,7 @@ impl Widget for &App {
         let chart_area = Rect::new(area.x, area.y + 4, area.width, area.height - 4);
         chart.render(chart_area, buf);
 
-        Paragraph::new(counter_text)
+        Paragraph::new(time_text)
             .centered()
             .block(block)
             .render(area, buf);

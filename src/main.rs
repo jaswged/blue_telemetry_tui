@@ -13,7 +13,7 @@ use crate::tui::App;
 
 
 fn main() -> Result<(), Box<dyn Error>> { // io::Result<()> { // -> Result<(), Box<dyn std::error::Error>>
-    let file_path = "data/truth_small.csv";
+    let file_path = "data/truth_fast.csv";
     let time_chunk_duration: u64 = 1_000_000_000;
     let chunks: Vec<Vec<TelemetryRecord>> = read_csv_and_chunk(file_path, time_chunk_duration)?;
 

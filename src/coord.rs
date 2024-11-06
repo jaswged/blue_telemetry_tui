@@ -6,17 +6,17 @@ const E: f64 = 0.081_819_190_842_622; // eccentricity
 const E_SQ: f64 = 0.006_694_379_990_141_4; // E.powi(2);
 
 #[derive(Debug)]
-struct EcefCoord {
-    x: f64,
-    y: f64,
-    z: f64,
+pub struct EcefCoord {
+    pub x: f64,
+    pub y: f64,
+    pub z: f64,
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]
-struct GeoCoord {
+pub struct GeoCoord {
     lat: f64,
     lon: f64,
-    alt: f64,
+    pub alt: f64,
 }
 
 impl EcefCoord {
@@ -24,7 +24,7 @@ impl EcefCoord {
         EcefCoord { x, y, z }
     }
 
-    fn to_geo(&self) -> GeoCoord {
+    pub fn to_geo(&self) -> GeoCoord {
         /*! Based on python code to do the conversion */
         // Compute longitude in radians
         let lon = self.y.atan2(self.x);
@@ -63,6 +63,9 @@ impl EcefCoord {
     }
 }
 
+/***************************
+           Tests
+***************************/
 #[cfg(test)]
 mod tests {
     use float_cmp::approx_eq;
