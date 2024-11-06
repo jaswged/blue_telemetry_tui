@@ -28,4 +28,6 @@ apogeee at 246.6 and 106,744 m
 
 ## ToDos
 
+- Speed up or slowdown playback based on user input
 - Convert ecef algo conversion to [Olson's](https://github.com/planet36/ecef-geodetic/blob/main/olson_1996/olson_1996.c) and check performance measures
+- Convert csv read into async streaming with [csv_async](https://docs.rs/csv-async/latest/csv_async/)
