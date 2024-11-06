@@ -2,6 +2,8 @@
 
 A terminal user interface for the Blue Origin flight telemetry from the launch of the New Shepard flight on October 13 2020.
 
+Data is courtesy of nasa.gov and the download link is below. This project uses the `truth.csv` file for its telemetry data.
+
 ## Links
 
 [Data Download Link](https://data.nasa.gov/Aerospace/Deorbit-Descent-and-Landing-Flight-1-DDL-F1-/vicw-ivgd/about_data)
