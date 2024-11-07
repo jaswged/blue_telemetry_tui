@@ -4,6 +4,8 @@ A terminal user interface for the Blue Origin flight telemetry from the launch o
 
 Data is courtesy of nasa.gov and the download link is below. This project uses the `truth.csv` file for its telemetry data.
 
+![blue_telemetry_tui.png](blue_telemetry_tui.png)
+
 ## Data
 
 This app used the `truth.csv` app for its data. The only changes that were made were some row removals from before and after the flight to get to the action sooner.
