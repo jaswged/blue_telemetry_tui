@@ -2,9 +2,6 @@ mod coord;
 mod csv_reader;
 mod tui;
 
-use ratatui::{
-    style::Stylize,
-};
 use ratatui::prelude::Widget;
 use std::error::Error;
 

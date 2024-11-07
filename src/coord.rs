@@ -1,5 +1,5 @@
 // WGS84 parameters for EcEf to Geo conversions
-const A: f64 = 6378137.0; // semi-major axis in meters
+const A: f64 = 6_378_137.0; // semi-major axis in meters
 const E: f64 = 0.081_819_190_842_622; // eccentricity
 
 // pre-square to save calculations

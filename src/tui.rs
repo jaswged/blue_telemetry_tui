@@ -6,7 +6,7 @@ use ratatui::{DefaultTerminal, Frame, symbols};
 use ratatui::text::Span;
 use ratatui::prelude::*;
 use ratatui::symbols::border;
-use ratatui::widgets::{Axis, Block, Chart, Dataset, Borders, Gauge, GraphType, Paragraph};
+use ratatui::widgets::{Axis, Block, Chart, Dataset, Borders, Gauge, Paragraph};
 
 use crate::coord::EcefCoord;
 use crate::csv_reader::TelemetryRecord;
@@ -51,7 +51,7 @@ impl App {
     pub fn run(&mut self, terminal: &mut DefaultTerminal) -> io::Result<()> {
         while !self.exit {
             terminal.draw(|frame| {
-                self.draw(frame)
+                self.draw(frame);
             })?;
 
             // Get next chunk of results to show

@@ -28,6 +28,7 @@ apogeee at 246.6 and 106,744 m
 
 ## ToDos
 
+- [x] Convert ecef coordinates to Geo
 - [ ] Spread out the widgets [docs](https://ratatui.netlify.app/book/concepts/layout/)
 - [ ] Show graph of altitude
 - [ ] Show graph of velocity
@@ -37,6 +38,6 @@ apogeee at 246.6 and 106,744 m
 
 ## Links
 
-[Data Download Link](https://data.nasa.gov/Aerospace/Deorbit-Descent-and-Landing-Flight-1-DDL-F1-/vicw-ivgd/about_data)
-[Project description](https://techport.nasa.gov/projects/116144)
-[Powerpoint about mission](https://ntrs.nasa.gov/api/citations/20210021279/downloads/FY21%20GCD%20APR%20-%20Blue%20Origin%20DDL%20Tipping%20Point-20210914%20(2).pptx.pdf)
+- [Data Download Link](https://data.nasa.gov/Aerospace/Deorbit-Descent-and-Landing-Flight-1-DDL-F1-/vicw-ivgd/about_data)
+- [Project description](https://techport.nasa.gov/projects/116144)
+- [Powerpoint about mission](https://ntrs.nasa.gov/api/citations/20210021279/downloads/FY21%20GCD%20APR%20-%20Blue%20Origin%20DDL%20Tipping%20Point-20210914%20(2).pptx.pdf)
