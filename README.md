@@ -6,6 +6,9 @@ Data is courtesy of nasa.gov and the download link is below. This project uses t
 
 ![blue_telemetry_tui.png](blue_telemetry_tui.png)
 
+![blue_telemetry_tui.gif](blue_telemetry_tui.gif)
+**Note** Gif is speed up
+
 ## Data
 
 This app used the `truth.csv` app for its data. The only changes that were made were some row removals from before and after the flight to get to the action sooner.
