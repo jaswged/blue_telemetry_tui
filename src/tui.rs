@@ -1,12 +1,12 @@
-use std::io;
-use std::time::Duration;
 use crossterm::event;
 use crossterm::event::{Event, KeyCode, KeyEvent, KeyEventKind};
-use ratatui::{DefaultTerminal, Frame, symbols};
-use ratatui::text::Span;
 use ratatui::prelude::*;
 use ratatui::symbols::border;
-use ratatui::widgets::{Axis, Block, Chart, Dataset, Borders, Gauge, Paragraph};
+use ratatui::text::Span;
+use ratatui::widgets::{Axis, Block, Borders, Chart, Dataset, Gauge, Paragraph};
+use ratatui::{symbols, DefaultTerminal, Frame};
+use std::io;
+use std::time::Duration;
 
 use crate::coord::EcefCoord;
 use crate::csv_reader::TelemetryRecord;
@@ -63,13 +63,19 @@ impl App {
                     self.initial_time = chunk.iter().next().take().unwrap().timestamp_ns;
                 }
 
-                self.current_time = (last.timestamp_ns - self.initial_time) / self.time_chunk_duration;
+                self.current_time =
+                    (last.timestamp_ns - self.initial_time) / self.time_chunk_duration;
 
-                let ecef = EcefCoord { x: last.pos_x, y: last.pos_y, z: last.pos_z };
+                let ecef = EcefCoord {
+                    x: last.pos_x,
+                    y: last.pos_y,
+                    z: last.pos_z,
+                };
                 let alt: f64 = ecef.to_geo().alt.round(); // Round to whole number for nicer display
                 self.current_alt = alt;
 
-                self.altitude_points.push((self.current_chunk as f64, alt / 1000.0)); // Convert to Km for graph
+                self.altitude_points
+                    .push((self.current_chunk as f64, alt / 1000.0)); // Convert to Km for graph
 
                 // todo actually average the velocity over the chunk
                 self.avg_vel = last.vel_x;
@@ -106,10 +112,7 @@ impl App {
 
         let layout_top_row = Layout::default()
             .direction(Direction::Horizontal)
-            .constraints(vec![
-                Constraint::Percentage(20),
-                Constraint::Percentage(80),
-            ])
+            .constraints(vec![Constraint::Percentage(20), Constraint::Percentage(80)])
             .split(layout_rows[1]);
 
         let text_rows = Layout::default()
@@ -122,7 +125,8 @@ impl App {
             ])
             .split(layout_top_row[1]);
 
-        let title = Line::from(" Blue Origin New Shepard flight telemetry from flight NS-13 ".bold());
+        let title =
+            Line::from(" Blue Origin New Shepard flight telemetry from flight NS-13 ".bold());
         let instructions = Line::from(vec![
             " Start over ".into(),
             "<Space>".blue().bold(),
@@ -140,12 +144,13 @@ impl App {
 
         // Row 1
         // Render ascii rocket
-        frame.render_widget(Paragraph::new(" .'.\n |o|\n.'o'.\n|.-.|\n'   '").centered(), layout_top_row[0]); //layout[1]);
+        frame.render_widget(
+            Paragraph::new(" .'.\n |o|\n.'o'.\n|.-.|\n'   '").centered(),
+            layout_top_row[0],
+        );
 
         // Show text fields
-        let freq_txt = Line::from(vec![
-            "Sim is running at 5 flight seconds per second".into(),
-        ]);
+        let freq_txt = Line::from(vec!["Sim is running at 5 flight seconds per second".into()]);
         frame.render_widget(freq_txt.centered().bold(), text_rows[1]);
 
         let time_txt = Line::from(vec![
@@ -163,9 +168,14 @@ impl App {
         frame.render_widget(alt_txt.centered().bold(), text_rows[3]);
 
         // Row 2: Show progress bar
-        let cur_percent = (self.current_chunk as f32 / (self.chunks.len() as f32) * 100.0).round() as u16;
+        let cur_percent =
+            (self.current_chunk as f32 / (self.chunks.len() as f32) * 100.0).round() as u16;
         let percent_gauge = Gauge::default()
-            .block(Block::default().title("Percent through mission").borders(Borders::ALL))
+            .block(
+                Block::default()
+                    .title("Percent through mission")
+                    .borders(Borders::ALL),
+            )
             .gauge_style(Style::default().fg(Color::Cyan))
             .percent(cur_percent);
         frame.render_widget(percent_gauge, layout_rows[2]);
@@ -188,22 +198,29 @@ impl App {
                 format!("{}", self.window_y[0]),
                 Style::default().add_modifier(Modifier::BOLD),
             ),
-            Span::raw(format!("{}", ((self.window_y[0] + self.window_y[1]) * 0.25).round())),
-            Span::raw(format!("{}", ((self.window_y[0] + self.window_y[1]) / 2.0).round())),
-            Span::raw(format!("{}", ((self.window_y[0] + self.window_y[1]) * 0.75).round())),
+            Span::raw(format!(
+                "{}",
+                ((self.window_y[0] + self.window_y[1]) * 0.25).round()
+            )),
+            Span::raw(format!(
+                "{}",
+                ((self.window_y[0] + self.window_y[1]) / 2.0).round()
+            )),
+            Span::raw(format!(
+                "{}",
+                ((self.window_y[0] + self.window_y[1]) * 0.75).round()
+            )),
             Span::styled(
                 format!("{}", self.window_y[1]),
                 Style::default().add_modifier(Modifier::BOLD),
             ),
         ];
 
-        let datasets = vec![
-            Dataset::default()
-                .name("Altitude")
-                .marker(symbols::Marker::Braille)
-                .style(Style::default().fg(Color::Cyan))
-                .data(&self.altitude_points),
-        ];
+        let datasets = vec![Dataset::default()
+            .name("Altitude")
+            .marker(symbols::Marker::Braille)
+            .style(Style::default().fg(Color::Cyan))
+            .data(&self.altitude_points)];
 
         let chart = Chart::new(datasets)
             .block(Block::bordered())

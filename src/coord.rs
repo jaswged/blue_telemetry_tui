@@ -20,7 +20,7 @@ pub struct GeoCoord {
 }
 
 impl EcefCoord {
-    fn new(x: f64, y: f64, z: f64, ) -> Self {
+    fn new(x: f64, y: f64, z: f64) -> Self {
         EcefCoord { x, y, z }
     }
 
@@ -34,8 +34,8 @@ impl EcefCoord {
 
         // Initial estimate for latitude
         let theta = self.z.atan2(p * (1.0 - E_SQ));
-        let mut lat = (self.z + E_SQ * A * theta.sin().powi(3))
-            .atan2(p - E_SQ * A * theta.cos().powi(3));
+        let mut lat =
+            (self.z + E_SQ * A * theta.sin().powi(3)).atan2(p - E_SQ * A * theta.cos().powi(3));
 
         // Iterative calculation to refine latitude
         loop {
@@ -55,11 +55,15 @@ impl EcefCoord {
         let alt = p / lat.cos() - n;
 
         // Convert latitude and longitude from radians to degrees
-        let lat_deg = lat.to_degrees();  // lat * (180.0 / PI)
-        let lon_deg = lon.to_degrees();  // lon * (180.0 / PI)
+        let lat_deg = lat.to_degrees(); // lat * (180.0 / PI)
+        let lon_deg = lon.to_degrees(); // lon * (180.0 / PI)
 
         // (lat_deg, lon_deg, h)
-        GeoCoord{ lat: lat_deg, lon: lon_deg, alt }
+        GeoCoord {
+            lat: lat_deg,
+            lon: lon_deg,
+            alt,
+        }
     }
 }
 
@@ -68,9 +72,9 @@ impl EcefCoord {
 ***************************/
 #[cfg(test)]
 mod tests {
+    use super::*;
     use float_cmp::approx_eq;
     use rstest::rstest;
-    use super::*;
 
     #[rstest]
     #[case(EcefCoord{x: 652954.1006, y: 4774619.7919, z: -4167647.7937},
@@ -85,8 +89,26 @@ mod tests {
         println!("Expect result: {:?}", expected);
 
         // Test equality of floats up to 5 digits
-        assert!( approx_eq!(f64, expected.lat, actual.lat, epsilon = 0.00003, ulps = 2));
-        assert!( approx_eq!(f64, expected.lon, actual.lon, epsilon = 0.00003, ulps = 2));
-        assert!( approx_eq!(f64, expected.alt, actual.alt, epsilon = 0.00003, ulps = 2))
+        assert!(approx_eq!(
+            f64,
+            expected.lat,
+            actual.lat,
+            epsilon = 0.00003,
+            ulps = 2
+        ));
+        assert!(approx_eq!(
+            f64,
+            expected.lon,
+            actual.lon,
+            epsilon = 0.00003,
+            ulps = 2
+        ));
+        assert!(approx_eq!(
+            f64,
+            expected.alt,
+            actual.alt,
+            epsilon = 0.00003,
+            ulps = 2
+        ))
     }
 }

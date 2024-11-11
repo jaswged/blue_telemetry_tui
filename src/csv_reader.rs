@@ -1,6 +1,6 @@
 use csv::ReaderBuilder;
-use std::fs::File;
 use std::error::Error;
+use std::fs::File;
 
 #[derive(Debug)]
 pub struct TelemetryRecord {
@@ -15,7 +15,10 @@ pub struct TelemetryRecord {
 
 #[allow(clippy::cast_possible_truncation)]
 #[allow(clippy::cast_sign_loss)]
-pub fn read_csv_and_chunk(file_path: &str, time_chunk_duration: u64) -> Result<Vec<Vec<TelemetryRecord>>, Box<dyn Error>> {
+pub fn read_csv_and_chunk(
+    file_path: &str,
+    time_chunk_duration: u64,
+) -> Result<Vec<Vec<TelemetryRecord>>, Box<dyn Error>> {
     // Open the CSV file
     let file = File::open(file_path)?;
     let mut rdr = ReaderBuilder::new().has_headers(true).from_reader(file);
@@ -29,11 +32,7 @@ pub fn read_csv_and_chunk(file_path: &str, time_chunk_duration: u64) -> Result<V
         let record = result?;
         // Note: failed to parse straight to the struct because of the scientific notation
         // so we parse as f64 to handle scientific notation and then cast back to u64
-        let timestamp_ns: u64 = record
-            .get(0)
-            .unwrap()
-            .parse::<f64>()?
-            .round() as u64;
+        let timestamp_ns: u64 = record.get(0).unwrap().parse::<f64>()?.round() as u64;
 
         // Other data columns can be handled here
         let pos_x = record.get(1).unwrap().parse::<f64>().unwrap();
@@ -42,7 +41,15 @@ pub fn read_csv_and_chunk(file_path: &str, time_chunk_duration: u64) -> Result<V
         let vel_x = record.get(4).unwrap().parse::<f64>().unwrap();
         let vel_y = record.get(5).unwrap().parse::<f64>().unwrap();
         let vel_z = record.get(6).unwrap().parse::<f64>().unwrap();
-        let row = TelemetryRecord { timestamp_ns, pos_x, pos_y, pos_z, vel_x, vel_y, vel_z };
+        let row = TelemetryRecord {
+            timestamp_ns,
+            pos_x,
+            pos_y,
+            pos_z,
+            vel_x,
+            vel_y,
+            vel_z,
+        };
 
         // If it's the first row, start a new chunk
         if previous_timestamp.is_none() {
@@ -67,7 +74,7 @@ pub fn read_csv_and_chunk(file_path: &str, time_chunk_duration: u64) -> Result<V
                 // Update the previous timestamp
                 previous_timestamp = Some(timestamp_ns);
             } else {
-                 current_chunk.push(row); // Add the row to the current chunk
+                current_chunk.push(row); // Add the row to the current chunk
             }
         }
     }
