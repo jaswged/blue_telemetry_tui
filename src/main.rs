@@ -2,7 +2,6 @@ mod coord;
 mod csv_reader;
 mod tui;
 
-use ratatui::prelude::Widget;
 use std::error::Error;
 
 use crate::csv_reader::{read_csv_and_chunk, TelemetryRecord};

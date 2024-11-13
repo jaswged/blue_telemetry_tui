@@ -1,9 +1,6 @@
 // WGS84 parameters for EcEf to Geo conversions
 const A: f64 = 6_378_137.0; // semi-major axis in meters
-const E: f64 = 0.081_819_190_842_622; // eccentricity
-
-// pre-square to save calculations
-const E_SQ: f64 = 0.006_694_379_990_141_4; // E.powi(2);
+const E_SQ: f64 = 0.006_694_379_990_141_4; // eccentricity squared
 
 #[derive(Debug)]
 pub struct EcefCoord {
@@ -20,10 +17,6 @@ pub struct GeoCoord {
 }
 
 impl EcefCoord {
-    fn new(x: f64, y: f64, z: f64) -> Self {
-        EcefCoord { x, y, z }
-    }
-
     pub fn to_geo(&self) -> GeoCoord {
         /*! Based on python code to do the conversion */
         // Compute longitude in radians
