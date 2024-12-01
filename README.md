@@ -18,6 +18,9 @@ This app used the `truth.csv` app for its data. The only changes that were made 
 New Shepard flight on October 13 2020. Apogee 107.0 Km (66.52 mi)
 Launched from West Texas at an altitude around 3700 ft
 
+`BODDL-TP` Nasa mission.
+> The flight included IMU, cameras for terrain relative navigation, and range and velocity lidar sensors. On that particular New Shepard launch, it flew those experiments for NASA.
+
 Max altitude of PM ~100 km
 Max vertical velocity ~900 m/s
 Total flight time of PM ~7.5 min
@@ -32,8 +35,8 @@ apogeee at 246.6 and 106,744 m
 ## ToDos
 
 - [x] Convert ecef coordinates to Geo
-- [ ] Spread out the widgets [docs](https://ratatui.netlify.app/book/concepts/layout/)
-- [ ] Show graph of altitude
+- [x] Spread out the widgets [docs](https://ratatui.netlify.app/book/concepts/layout/)
+- [x] Show graph of altitude
 - [ ] Show graph of velocity
 - [ ] Speed up or slowdown playback based on user input
 - [ ] Convert ecef algo conversion to [Olson's](https://github.com/planet36/ecef-geodetic/blob/main/olson_1996/olson_1996.c) and check performance measures
