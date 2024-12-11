@@ -77,9 +77,14 @@ impl App {
                 self.altitude_points
                     .push((self.current_chunk as f64, alt / 1000.0)); // Convert to Km for graph
 
-                // todo actually average the velocity over the chunk
-                self.avg_vel = last.vel_x;
-                //self.velocity_points.push((self.current_time, alt));
+                // Average the velocity over the chunk
+                let vel_sum: f64 = chunk.iter().map(|telem| 
+                    (telem.vel_x.powi(2) + telem.vel_y.powi(2) + telem.vel_z.powi(2)).sqrt()
+                )
+                .sum();
+                let avg_vel = (vel_sum / chunk.len() as f64).round();
+
+                self.avg_vel = avg_vel;
 
                 // update window bounds for graph
                 if self.current_chunk < 240 {
@@ -156,7 +161,9 @@ impl App {
         let time_txt = Line::from(vec![
             "    Time: +".into(),
             self.current_time.to_string().into(),
-            " seconds".into(),
+            " seconds.    Average Velocity: ".into(),
+            self.avg_vel.to_string().into(),
+            " m/s ".into(),
         ]);
         frame.render_widget(time_txt.centered().bold(), text_rows[2]);
 

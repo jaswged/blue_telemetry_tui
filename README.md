@@ -37,10 +37,12 @@ apogeee at 246.6 and 106,744 m
 - [x] Convert ecef coordinates to Geo
 - [x] Spread out the widgets [docs](https://ratatui.netlify.app/book/concepts/layout/)
 - [x] Show graph of altitude
+- [x] Display average velocity
 - [ ] Show graph of velocity
 - [ ] Speed up or slowdown playback based on user input
 - [ ] Convert ecef algo conversion to [Olson's](https://github.com/planet36/ecef-geodetic/blob/main/olson_1996/olson_1996.c) and check performance measures
 - [ ] Convert csv read into async streaming with [csv_async](https://docs.rs/csv-async/latest/csv_async/)
+- [ ] Add ability to pause flow
 
 ## Links
 
