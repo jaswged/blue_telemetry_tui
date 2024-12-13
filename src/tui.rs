@@ -26,6 +26,7 @@ pub struct App {
     current_time: u64,
     current_alt: f64,
     altitude_points: Vec<(f64, f64)>,
+    velocity_points: Vec<(f64, f64)>,
 }
 
 impl App {
@@ -44,6 +45,7 @@ impl App {
             current_time: 0,
             current_alt: 0.0,
             altitude_points: Vec::new(),
+            velocity_points: Vec::new(),
         }
     }
 
@@ -76,7 +78,7 @@ impl App {
 
                 self.altitude_points
                     .push((self.current_chunk as f64, alt / 1000.0)); // Convert to Km for graph
-
+                
                 // Average the velocity over the chunk
                 let vel_sum: f64 = chunk.iter().map(|telem| 
                     (telem.vel_x.powi(2) + telem.vel_y.powi(2) + telem.vel_z.powi(2)).sqrt()
@@ -85,6 +87,8 @@ impl App {
                 let avg_vel = (vel_sum / chunk.len() as f64).round();
 
                 self.avg_vel = avg_vel;
+                // Todo use 2 different scales on the same chart for velocity vs km
+                self.velocity_points.push((self.current_chunk as f64, avg_vel));
 
                 // update window bounds for graph
                 if self.current_chunk < 240 {
@@ -223,11 +227,18 @@ impl App {
             ),
         ];
 
-        let datasets = vec![Dataset::default()
-            .name("Altitude")
-            .marker(symbols::Marker::Braille)
-            .style(Style::default().fg(Color::Cyan))
-            .data(&self.altitude_points)];
+        let datasets = vec![
+            Dataset::default()
+                .name("Altitude")
+                .marker(symbols::Marker::Braille)
+                .style(Style::default().fg(Color::Cyan))
+                .data(&self.altitude_points),
+            Dataset::default()
+                .name("Velocity")
+                .marker(symbols::Marker::Braille)
+                .style(Style::default().fg(Color::Red))
+                .data(&self.velocity_points),
+        ];
 
         let chart = Chart::new(datasets)
             .block(Block::bordered())
